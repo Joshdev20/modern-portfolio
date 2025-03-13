@@ -1,66 +1,37 @@
 import { motion } from "framer-motion";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import emailjs from '@emailjs/browser';
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Mail, Github } from "lucide-react";
+import { Mail, Github, Copy, CheckCheck } from "lucide-react";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  message: z.string().min(10, "Message must be at least 10 characters")
-});
-
 export function Contact() {
+  const [copied, setCopied] = useState(false);
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      message: ""
-    }
-  });
+  const email = "joshuaoluchukwu215@gmail.com";
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const copyEmail = async () => {
     try {
-      await emailjs.send(
-        'YOUR_SERVICE_ID', // You'll need to replace these with actual
-        'YOUR_TEMPLATE_ID', // EmailJS credentials after signing up
-        {
-          from_name: values.name,
-          from_email: values.email,
-          message: values.message,
-          to_email: 'joshuaoluchukwu215@gmail.com'
-        },
-        'YOUR_PUBLIC_KEY'
-      );
-
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
       toast({
-        title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon.",
+        title: "Email copied!",
+        description: "The email address has been copied to your clipboard.",
       });
-
-      form.reset();
-    } catch (error) {
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        title: "Failed to copy",
+        description: "Please try selecting and copying the email manually.",
       });
     }
-  }
+  };
 
   return (
     <section className="py-20" id="contact">
       <div className="text-center mb-12">
         <h2 className="text-4xl font-bold mb-4">Let's Work Together</h2>
-        <p className="text-muted-foreground text-lg">Got a project in mind? Let's discuss how I can help bring your ideas to life.</p>
+        <p className="text-muted-foreground text-lg">Ready to discuss your project? Get in touch and let's create something amazing.</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-12 items-start max-w-6xl mx-auto px-4">
@@ -69,35 +40,65 @@ export function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="space-y-6"
+          className="space-y-8"
         >
-          <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
-          <div className="space-y-4">
-            <a 
-              href="mailto:joshuaoluchukwu215@gmail.com" 
-              className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors p-4 rounded-lg hover:bg-accent"
-            >
-              <Mail className="h-5 w-5" />
-              joshuaoluchukwu215@gmail.com
-            </a>
-            <a 
-              href="https://github.com/Joshdev20" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors p-4 rounded-lg hover:bg-accent"
-            >
-              <Github className="h-5 w-5" />
-              github.com/Joshdev20
-            </a>
+          <div className="bg-card p-8 rounded-lg shadow-lg">
+            <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
+            <div className="space-y-6">
+              <div className="flex flex-col gap-4">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-3 text-left h-auto py-4 px-6"
+                  onClick={() => window.location.href = `mailto:${email}`}
+                >
+                  <Mail className="h-5 w-5 shrink-0" />
+                  <span className="text-sm">{email}</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-3 text-left h-auto py-4 px-6"
+                  onClick={copyEmail}
+                >
+                  {copied ? <CheckCheck className="h-5 w-5 shrink-0 text-green-500" /> : <Copy className="h-5 w-5 shrink-0" />}
+                  <span className="text-sm">Copy Email Address</span>
+                </Button>
+                <a 
+                  href="https://github.com/Joshdev20" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-3 text-left h-auto py-4 px-6"
+                  >
+                    <Github className="h-5 w-5 shrink-0" />
+                    <span className="text-sm">github.com/Joshdev20</span>
+                  </Button>
+                </a>
+              </div>
+            </div>
           </div>
 
-          <div className="mt-8 p-6 bg-card rounded-lg">
+          <div className="bg-card p-8 rounded-lg shadow-lg">
             <h4 className="text-xl font-semibold mb-4">Why Work With Me?</h4>
-            <ul className="space-y-3 text-muted-foreground">
-              <li>✓ 4+ years of full-stack development experience</li>
-              <li>✓ Strong expertise in MERN, PERN, and MEAN stacks</li>
-              <li>✓ Focus on clean, maintainable code</li>
-              <li>✓ Proven track record of successful project delivery</li>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">✓</span>
+                <span>4+ years of full-stack development experience with modern web technologies</span>
+              </li>
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">✓</span>
+                <span>Expertise in MERN, PERN, and MEAN stacks for scalable applications</span>
+              </li>
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">✓</span>
+                <span>Focus on clean, maintainable code and optimal performance</span>
+              </li>
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">✓</span>
+                <span>Strong problem-solving skills and attention to detail</span>
+              </li>
             </ul>
           </div>
         </motion.div>
@@ -107,58 +108,45 @@ export function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="bg-card p-6 rounded-lg shadow-lg"
+          className="bg-card p-8 rounded-lg shadow-lg"
         >
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your name" {...field} className="bg-background" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your email" {...field} className="bg-background" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Message</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Tell me about your project" 
-                        {...field} 
-                        className="min-h-[150px] bg-background"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" size="lg">
-                Send Message
-              </Button>
-            </form>
-          </Form>
+          <h3 className="text-2xl font-semibold mb-6">Let's Start a Conversation</h3>
+          <p className="text-muted-foreground mb-8">
+            I'm always interested in hearing about new projects and opportunities. 
+            Whether you have a specific project in mind or just want to explore possibilities, 
+            I'm here to help turn your ideas into reality.
+          </p>
+
+          <div className="space-y-6">
+            <h4 className="text-lg font-medium">What you can expect:</h4>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">1.</span>
+                <span>Quick response within 24 hours</span>
+              </li>
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">2.</span>
+                <span>Professional consultation about your project</span>
+              </li>
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">3.</span>
+                <span>Clear communication and project timeline</span>
+              </li>
+              <li className="flex items-start gap-3 text-muted-foreground">
+                <span className="text-primary">4.</span>
+                <span>Detailed project proposal and cost estimation</span>
+              </li>
+            </ul>
+
+            <Button 
+              className="w-full mt-8"
+              size="lg"
+              onClick={() => window.location.href = `mailto:${email}`}
+            >
+              Send Me an Email
+              <Mail className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
         </motion.div>
       </div>
     </section>
