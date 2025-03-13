@@ -37,13 +37,13 @@ export function Projects() {
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
 
   return (
-    <section className="py-20" id="projects">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold mb-4">Featured Projects</h2>
+    <section className="py-12 sm:py-20 px-4" id="projects">
+      <div className="text-center mb-8 sm:mb-12">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4">Featured Projects</h2>
         <p className="text-muted-foreground">Some of my recent work</p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
         {projects.map((project, index) => (
           <motion.div
             key={project.id}
@@ -53,7 +53,7 @@ export function Projects() {
             viewport={{ once: true }}
           >
             <Card 
-              className="cursor-pointer hover:shadow-lg transition-shadow"
+              className="cursor-pointer hover:shadow-lg transition-shadow h-full"
               onClick={() => setSelectedProject(project)}
             >
               <CardHeader>
@@ -64,8 +64,8 @@ export function Projects() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <CardTitle>{project.title}</CardTitle>
-                <CardDescription>{project.description}</CardDescription>
+                <CardTitle className="text-xl sm:text-2xl mb-2">{project.title}</CardTitle>
+                <CardDescription className="text-sm sm:text-base">{project.description}</CardDescription>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {project.tech.map((tech) => (
                     <span
