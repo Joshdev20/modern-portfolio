@@ -4,8 +4,8 @@ import { ArrowDown, FileDown } from "lucide-react";
 
 export function Hero() {
   const downloadResume = () => {
-    // The resume PDF file will be served from the public directory
-    window.open('/Joshua_Patrick_Resume.pdf', '_blank');
+    // Open resume in a new tab - it will use the HTML version for better accessibility
+    window.open('/Joshua_Patrick_Resume.html', '_blank');
   };
 
   return (
@@ -52,7 +52,7 @@ export function Hero() {
           onClick={downloadResume}
           className="border-primary text-primary hover:bg-primary/10"
         >
-          Download Resume <FileDown className="ml-2 h-4 w-4" />
+          View Resume <FileDown className="ml-2 h-4 w-4" />
         </Button>
       </motion.div>
 
