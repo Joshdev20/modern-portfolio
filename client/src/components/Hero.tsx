@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown, FileDown } from "lucide-react";
 
 export function Hero() {
+  const downloadResume = () => {
+    // The resume PDF file will be served from the public directory
+    window.open('/Joshua_Patrick_Resume.pdf', '_blank');
+  };
+
   return (
     <section className="min-h-screen flex flex-col justify-center items-center text-center py-20">
       <motion.div
@@ -13,6 +18,7 @@ export function Hero() {
         <h1 className="text-4xl sm:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
           Full Stack Developer
         </h1>
+        <h2 className="text-2xl sm:text-3xl text-muted-foreground mb-4">Joshua Patrick</h2>
       </motion.div>
 
       <motion.div
@@ -22,8 +28,8 @@ export function Hero() {
         className="max-w-2xl mb-8"
       >
         <p className="text-xl text-muted-foreground">
-          I craft modern web applications using MERN, PERN and MEAN stacks.
-          Specializing in creating robust and scalable solutions with clean, efficient code.
+          With over 4 years of experience crafting modern web applications using MERN, PERN and MEAN stacks.
+          Specializing in creating robust, scalable solutions with clean, efficient code.
         </p>
       </motion.div>
 
@@ -35,13 +41,30 @@ export function Hero() {
       >
         <Button
           size="lg"
+          className="bg-primary hover:bg-primary/90"
           onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
         >
           View Projects <ArrowDown className="ml-2 h-4 w-4" />
         </Button>
-        <Button size="lg" variant="outline">
+        <Button 
+          size="lg" 
+          variant="outline"
+          onClick={downloadResume}
+          className="border-primary text-primary hover:bg-primary/10"
+        >
           Download Resume <FileDown className="ml-2 h-4 w-4" />
         </Button>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+        className="mt-12 flex gap-4 justify-center items-center text-muted-foreground"
+      >
+        <div className="h-[1px] w-12 bg-border"></div>
+        <span>4+ Years of Experience</span>
+        <div className="h-[1px] w-12 bg-border"></div>
       </motion.div>
     </section>
   );
